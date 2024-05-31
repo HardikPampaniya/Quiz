@@ -8,9 +8,9 @@ import './App.css';
 const App = () => {
   return (
     <Provider store={store}>
-      <div className="App">
-        <h1>Quiz Application</h1>
+      <div className="row justify-content-center">
         <Quiz />
+        <FireworksTest />
       </div>
     </Provider>
   );

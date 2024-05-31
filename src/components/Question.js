@@ -1,4 +1,3 @@
-// src/components/Question.js
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setAnswer } from '../redux/actions';
@@ -12,39 +11,43 @@ const Question = ({ question }) => {
   };
 
   const renderOptions = () => {
-    if (question.type === 'multiple') {
-      return question.options.map((option, index) => (
-        <div key={index}>
+    switch (question.type) {
+      case 'multiple':
+        return question.options.map((option) => (
+          <div key={option}>
+            <input
+              type="radio"
+              value={option}
+              checked={answer === option}
+              onChange={handleChange}
+              aria-label={option}
+            />
+            {option}
+          </div>
+        ));
+      case 'dropdown':
+        return (
+          <select value={answer || ''} onChange={handleChange} aria-label="Select an option">
+            <option value="" disabled>Select an option</option>
+            {question.options.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        );
+      case 'text':
+        return (
           <input
-            type="radio"
-            value={option}
-            checked={answer === option}
+            type="text"
+            value={answer || ''}
             onChange={handleChange}
+            aria-label="Enter your answer"
           />
-          {option}
-        </div>
-      ));
-    } else if (question.type === 'dropdown') {
-      return (
-        <select value={answer || ''} onChange={handleChange}>
-          <option value="" disabled>Select an option</option>
-          {question.options.map((option, index) => (
-            <option key={index} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-      );
-    } else if (question.type === 'text') {
-      return (
-        <input
-          type="text"
-          value={answer || ''}
-          onChange={handleChange}
-        />
-      );
+        );
+      default:
+        return <p>Unknown question type</p>;
     }
-    return null;
   };
 
   return (
